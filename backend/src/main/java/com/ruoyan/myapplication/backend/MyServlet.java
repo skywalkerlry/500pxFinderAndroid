@@ -9,13 +9,17 @@ package com.ruoyan.myapplication.backend;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import utils.ConnectionUtils;
 
 public class MyServlet extends HttpServlet {
+
     @Override
     public void init() throws ServletException {
         super.init();
-//        String newFeed = ConnectionUtils.getFeed();
     }
 
     @Override
@@ -37,4 +41,5 @@ public class MyServlet extends HttpServlet {
         String result = ConnectionUtils.getFeed();
         resp.getWriter().println(result);
     }
+
 }

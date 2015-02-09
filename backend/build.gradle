@@ -24,6 +24,9 @@ targetCompatibility = JavaVersion.VERSION_1_7
 dependencies {
     appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.14'
     compile 'javax.servlet:servlet-api:2.5'
+    compile files('libs/gson-2.2.4.jar')
+    compile files('src/main/webapp/WEB-INF/lib/appengine-api-1.0-sdk-1.9.17.jar')
+    compile files('src/main/webapp/WEB-INF/lib/gson-2.2.4.jar')
 }
 
 appengine {
