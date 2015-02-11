@@ -14,7 +14,9 @@ import bean.Api500px;
 public class ConnectionUtils {
 
     public static String getFeed() {
-        String path = Api500px.getBasicUrl()+"&consumer_key="+Api500px.getConsumerKey();
+        String path = Api500px.getBasicUrl()+"&rpp="+Api500px.getPhotosPerPage()
+                +"&consumer_key="+Api500px
+                .getConsumerKey();
         InputStream inputStream = null;
         HttpURLConnection httpURLConnection = null;
 
