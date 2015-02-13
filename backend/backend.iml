@@ -38,7 +38,7 @@
     <orderEntry type="library" exported="" name="servlet-api-2.5" level="project" />
     <orderEntry type="library" exported="" name="_Users_ruoyan_AndroidStudioProjects_Mybackendproject_backend_libs_gson_2_2_4_jar" level="project" />
     <orderEntry type="library" exported="" name="appengine-api-1.0-sdk-1.9.17" level="project" />
-    <orderEntry type="library" exported="" name="_Users_ruoyan_AndroidStudioProjects_Mybackendproject_backend_src_main_webapp_WEB_INF_lib_gson_2_2_4_jar" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.2.4" level="project" />
     <orderEntry type="library" exported="" name="mysql-connector-java-5.1.34-bin" level="project" />
   </component>
 </module>
