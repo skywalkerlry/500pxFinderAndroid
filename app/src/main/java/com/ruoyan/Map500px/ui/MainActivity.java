@@ -21,18 +21,7 @@ public class MainActivity extends BaseActivity {
 
     private DrawerLayout mDrawerLayout;
     private FrameLayout contentLayout;
-//    private ListView mDrawerList;
-
-    private String[] testListArray;
-
     private ActionBarDrawerToggle mDrawerToggle;
-
-    private RequestQueue mQueue;
-
-    private int searchRadius;
-
-    private List<List<Object>> photoInfoList = new ArrayList<List<Object>>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
