@@ -1,3 +1,4 @@
 /*
-!app/src/*
-!backend/src/*
+!.gitignore
+!app/src/
+!backend/src/
