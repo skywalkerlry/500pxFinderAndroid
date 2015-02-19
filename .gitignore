@@ -1,4 +1,6 @@
-/*
-!.gitignore
-!app/src/
-!backend/src/
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.ideal/libraries
+.DS_Store
+/build

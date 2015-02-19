@@ -1,10 +1,10 @@
 package com.ruoyan.map500px.ui.fragment;
 
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +12,11 @@ import android.view.ViewGroup;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.internal.LinkedTreeMap;
+import com.google.maps.android.ui.IconGenerator;
 import com.ruoyan.map500px.R;
 import com.ruoyan.map500px.api.Api500px;
 import com.ruoyan.map500px.bean.UserLocation;
@@ -30,12 +34,7 @@ import java.util.Map;
 /**
  * Created by ruoyan on 2/17/15.
  */
-public class DrawerFragment extends android.support.v4.app.Fragment{
-
-    public static final String USER_LATITUDE = "latitude";
-    public static final String USER_LONGITUDE = "longitude";
-    public static final int INIT_SEARCH_RADIUS = 10;
-    public static final int THUMBNAIL_SIZE = 3;
+public class DrawerFragment extends BaseFragment{
 
     private RecyclerView mRecyclerView;
     private DrawerAdapter mAdapter;
@@ -44,12 +43,14 @@ public class DrawerFragment extends android.support.v4.app.Fragment{
     private String userLongitude;
     private int searchRadius;
     private List<Map<String,Object>> photoInfoList;
+    private IconGenerator mGenerator;
 
 
     public static DrawerFragment newInstance(UserLocation location) {
         DrawerFragment fragment = new DrawerFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(USER_LATITUDE,Double.toString(location.getUserLocation().get("latitude")));
+        bundle.putString(USER_LATITUDE,Double.toString(location.getUserLocation().get
+                ("latitude")));
         bundle.putString(USER_LONGITUDE,Double.toString(location.getUserLocation().get
                 ("longitude")));
 
@@ -125,13 +126,30 @@ public class DrawerFragment extends android.support.v4.app.Fragment{
                     @Override
                     protected void onPostExecute(Object o) {
                         super.onPostExecute(o);
-                        Log.i("result",photoInfoList.toString());
+                        //Log.i("result",photoInfoList.toString());
+                        addMarkerOnMap();
                         mAdapter.notifyDataSetChanged();
 
                     }
                 });
             }
         };
+    }
+
+    private void addMarkerOnMap() {
+        mGenerator = new IconGenerator(getActivity());
+        mGenerator.setColor(getResources().getColor(R.color.deep_purple));
+        mGenerator.setTextAppearance(R.style.WihteText);
+        mGenerator.setContentPadding(5,0,5,0);
+        if (photoInfoList.size()>0) {
+            for (int i=0; i<photoInfoList.size(); i++) {
+                Map<String,Object> params = photoInfoList.get(i);
+                Bitmap iconBitmap = mGenerator.makeIcon(Integer.toString(i + 1));
+                map.addMarker(new MarkerOptions().position(new LatLng((double) params.get("latitude"),
+                        (double) params.get("longitude"))).icon(BitmapDescriptorFactory
+                        .fromBitmap(iconBitmap)));
+            }
+        }
     }
 
     private List<Object> parseJsonToPhotoList(String feed) {

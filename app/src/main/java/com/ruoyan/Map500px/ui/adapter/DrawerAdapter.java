@@ -49,7 +49,7 @@ public class DrawerAdapter
         Map<String,Object> photoInfo = photoInfoList.get(position);
         if (imageLoader == null)
             imageLoader = RequestManager.getInstance().getImageLoader();
-        viewHolder.order.setText(Integer.toString(position));
+        viewHolder.order.setText(Integer.toString(position+1));
         viewHolder.thumbNail.setImageUrl(photoInfo.get("image_url").toString(),imageLoader);
     }
 

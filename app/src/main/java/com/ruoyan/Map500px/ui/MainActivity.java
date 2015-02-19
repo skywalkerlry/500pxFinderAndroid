@@ -2,25 +2,21 @@ package com.ruoyan.map500px.ui;
 
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.View;
-import android.widget.FrameLayout;
 
-import com.android.volley.RequestQueue;
 import com.ruoyan.map500px.R;
 import com.ruoyan.map500px.ui.fragment.DrawerFragment;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.ruoyan.map500px.ui.fragment.MyMapFragment;
 
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity{
 
     private DrawerLayout mDrawerLayout;
-    private FrameLayout contentLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
@@ -29,8 +25,6 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        contentLayout = (FrameLayout) findViewById(R.id.content_frame);
-
         mDrawerLayout.setScrimColor(Color.argb(100, 0, 0, 0));
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.string.drawer_open,
@@ -70,7 +64,17 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onConnected(Bundle bundle) {
         super.onConnected(bundle);
+        initMap();
         initDrawer();
+    }
+    
+    @Override
+    public void onLocationChanged(Location location) {
+        super.onLocationChanged(location);
+    }
+
+    private void initMap() {
+        replaceFragment(R.id.content_frame, MyMapFragment.newInstance(userLocation));
     }
 
     private void initDrawer() {

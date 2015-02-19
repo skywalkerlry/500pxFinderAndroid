@@ -15,6 +15,8 @@ import android.view.View;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
@@ -25,13 +27,15 @@ import com.ruoyan.map500px.bean.UserLocation;
  * Created by ruoyan on 2/13/15.
  */
 public class BaseActivity extends FragmentActivity implements GoogleApiClient
-        .ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+        .ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private GoogleApiClient mGoogleApiClient;
     private static final int REQUEST_RESOLVE_ERROR = 1001;
     private static final String DIALOG_ERROR = "dialog_error";
     private boolean mResolvingError = false;
     public UserLocation userLocation;
+    private LocationRequest mLocationRequest;
+
 
     protected ActionBar actionBar;
     private ShimmerTextView mActionBarTitle;
@@ -120,6 +124,20 @@ public class BaseActivity extends FragmentActivity implements GoogleApiClient
         if (mLastLocation != null) {
             userLocation = new UserLocation(mLastLocation.getLatitude(),mLastLocation.getLongitude());
         }
+        createLocationRequest();
+        startLocationUpdates();
+    }
+
+    protected void startLocationUpdates() {
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient, mLocationRequest, this);
+    }
+
+    protected void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     @Override
@@ -154,6 +172,11 @@ public class BaseActivity extends FragmentActivity implements GoogleApiClient
 
     public void onDialogDismissed() {
         mResolvingError = false;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
     }
 
     public static class ErrorDialogFragment extends DialogFragment {
