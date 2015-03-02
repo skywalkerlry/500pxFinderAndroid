@@ -13,7 +13,6 @@
         android:layout_width="140dip"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:choiceMode="singleChoice" />
-
+        android:choiceMode="singleChoice"/>
 
 </android.support.v4.widget.DrawerLayout>

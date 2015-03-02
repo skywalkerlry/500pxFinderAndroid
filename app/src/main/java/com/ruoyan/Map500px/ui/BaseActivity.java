@@ -2,6 +2,7 @@ package com.ruoyan.map500px.ui;
 
 import android.app.ActionBar;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -18,6 +19,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
 import com.ruoyan.map500px.R;
@@ -45,6 +51,7 @@ public class BaseActivity extends FragmentActivity implements GoogleApiClient
         super.onCreate(savedInstanceState);
         initActionBar();
         buildGoogleApiClient();
+        initImageLoader(getApplicationContext());
     }
 
     private void initActionBar() {
@@ -122,7 +129,8 @@ public class BaseActivity extends FragmentActivity implements GoogleApiClient
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
-            userLocation = new UserLocation(mLastLocation.getLatitude(),mLastLocation.getLongitude());
+            userLocation = new UserLocation(mLastLocation.getLatitude(),
+                    mLastLocation.getLongitude(),0);
         }
         createLocationRequest();
         startLocationUpdates();
@@ -193,6 +201,16 @@ public class BaseActivity extends FragmentActivity implements GoogleApiClient
         public void onDismiss(DialogInterface dialog) {
             ((MainActivity)getActivity()).onDialogDismissed();
         }
+    }
+
+    public static void initImageLoader(Context context) {
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
+                .threadPriority(Thread.NORM_PRIORITY - 2).denyCacheImageMultipleSizesInMemory()
+                .memoryCache(new LruMemoryCache(2 * 1024 * 1024)).discCacheSize(10 * 1024 * 1024)
+                .discCacheFileNameGenerator(new Md5FileNameGenerator())
+                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                .build();
+        ImageLoader.getInstance().init(config);
     }
 
 }

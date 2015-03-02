@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.View;
 
 import com.ruoyan.map500px.R;
+import com.ruoyan.map500px.bean.UserLocation;
 import com.ruoyan.map500px.ui.fragment.DrawerFragment;
 import com.ruoyan.map500px.ui.fragment.MyMapFragment;
 
@@ -18,6 +19,7 @@ public class MainActivity extends BaseActivity{
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+    private boolean firstStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +40,9 @@ public class MainActivity extends BaseActivity{
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
+        lockDrawer();
         setTitle("Swipe");
-
+        firstStart = true;
     }
 
     protected void replaceFragment(int viewId, android.support.v4.app.Fragment fragment) {
@@ -64,8 +66,11 @@ public class MainActivity extends BaseActivity{
     @Override
     public void onConnected(Bundle bundle) {
         super.onConnected(bundle);
-        initMap();
-        initDrawer();
+        if (firstStart) {
+            initMap(userLocation);
+            initDrawer(userLocation);
+            firstStart = false;
+        }
     }
     
     @Override
@@ -73,12 +78,20 @@ public class MainActivity extends BaseActivity{
         super.onLocationChanged(location);
     }
 
-    private void initMap() {
+    public void initMap(UserLocation userLocation) {
         replaceFragment(R.id.content_frame, MyMapFragment.newInstance(userLocation));
     }
 
-    private void initDrawer() {
+    public void initDrawer(UserLocation userLocation) {
         replaceFragment(R.id.left_drawer, DrawerFragment.newInstance(userLocation));
+    }
+
+    public void unlockDrawer() {
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    public void lockDrawer() {
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
 }

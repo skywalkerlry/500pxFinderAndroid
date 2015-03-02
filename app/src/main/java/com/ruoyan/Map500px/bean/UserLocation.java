@@ -9,10 +9,11 @@ import java.util.Map;
 public class UserLocation {
     private Map<String, Double> userLocation = null;
 
-    public UserLocation(double latitude, double longitude) {
+    public UserLocation(double latitude, double longitude, double radius) {
         Map<String, Double> map = new HashMap<String, Double>();
         map.put("latitude", latitude);
         map.put("longitude", longitude);
+        map.put("radius", radius);
         this.setUserLocation(map);
     }
 

@@ -1,5 +1,6 @@
 package com.ruoyan.map500px.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,8 +22,10 @@ import com.ruoyan.map500px.R;
 import com.ruoyan.map500px.api.Api500px;
 import com.ruoyan.map500px.bean.UserLocation;
 import com.ruoyan.map500px.data.RequestManager;
+import com.ruoyan.map500px.ui.ImageViewActivity;
 import com.ruoyan.map500px.ui.MainActivity;
 import com.ruoyan.map500px.ui.adapter.DrawerAdapter;
+import com.ruoyan.map500px.ui.listener.RecyclerItemClickListener;
 import com.ruoyan.map500px.utils.JsonUtils;
 import com.ruoyan.map500px.utils.TaskUtils;
 
@@ -41,10 +44,9 @@ public class DrawerFragment extends BaseFragment{
     private MainActivity mActivity;
     private String userLatitude;
     private String userLongitude;
-    private int searchRadius;
+    private double searchRadius;
     private List<Map<String,Object>> photoInfoList;
     private IconGenerator mGenerator;
-
 
     public static DrawerFragment newInstance(UserLocation location) {
         DrawerFragment fragment = new DrawerFragment();
@@ -53,6 +55,8 @@ public class DrawerFragment extends BaseFragment{
                 ("latitude")));
         bundle.putString(USER_LONGITUDE,Double.toString(location.getUserLocation().get
                 ("longitude")));
+        bundle.putString(RADIUS,Double.toString(location.getUserLocation().get
+                ("radius")));
 
         fragment.setArguments(bundle);
         return fragment;
@@ -62,27 +66,39 @@ public class DrawerFragment extends BaseFragment{
         Bundle bundle = getArguments();
         userLatitude = bundle.getString(USER_LATITUDE);
         userLongitude = bundle.getString(USER_LONGITUDE);
+        searchRadius = Double.valueOf(bundle.getString(RADIUS));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mActivity = (MainActivity) getActivity();
         View contentView = inflater.inflate(R.layout.fragment_drawer, null);
-        photoInfoList = new ArrayList<Map<String,Object>>();
+        photoInfoList = new ArrayList<>();
         mRecyclerView = (RecyclerView) contentView.findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mAdapter = new DrawerAdapter(photoInfoList);
         mRecyclerView.setAdapter(mAdapter);
-
-        searchRadius = INIT_SEARCH_RADIUS;
-
+        mRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener
+                        .OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        String largeImageUrl = photoInfoList.get(position).get("full_size_image_url").toString();
+                        Intent intent = new Intent(getActivity(), ImageViewActivity.class);
+                        intent.putExtra(ImageViewActivity.IMAGE_URL, largeImageUrl);
+//                        intent.putExtra(ImageViewActivity.IMAGE_ORDER, position);
+                        startActivity(intent);
+                    }
+                })
+        );
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
 
-
         parseArgument();
+        if (searchRadius == 0)
+            searchRadius = INIT_SEARCH_RADIUS;
+
         requestImageInfo(THUMBNAIL_SIZE); //request thumbnail images first
 
         return contentView;
@@ -91,7 +107,7 @@ public class DrawerFragment extends BaseFragment{
     private void requestImageInfo(int imageSize) {
         String requestImg = Api500px.HOST + Api500px.SORT_RATING + "&geo=" +
                 userLatitude + "%2C" + userLongitude
-                + "%2C" + Integer.toString(searchRadius) + "mi" + "&image_size=" + Integer.toString
+                + "%2C" + Double.toString(searchRadius) + "mi" + "&image_size=" + Integer.toString
                 (imageSize) +
                 "&consumer_key=" + Api500px
                 .getConsumerKey();
@@ -111,13 +127,28 @@ public class DrawerFragment extends BaseFragment{
                     @Override
                     protected Object doInBackground(Object... inputs) {
                         List<Object> photoList = parseJsonToPhotoList(response);
-                        photoInfoList.clear();
-                        if (photoList != null) {
-                            for (int i = 0; i < photoList.size(); i++) {
-                                Map<String,Object> params = getMappedParams(photoList, i);
-                                if (params != null) {
-                                    photoInfoList.add(params);
+                        if (imageSize == THUMBNAIL_SIZE) {
+                            photoInfoList.clear();
+                            if (photoList != null) {
+                                for (int i = 0; i < photoList.size(); i++) {
+                                    Map<String, Object> params = getMappedParams(photoList, i);
+                                    if (params != null) {
+                                        photoInfoList.add(params);
+                                    }
                                 }
+                                requestImageInfo(FULL_IMAGE_SIZE);
+                            }
+                        }
+                        else if (imageSize == FULL_IMAGE_SIZE) {
+                            if (photoList != null) {
+                                for (int i = 0; i < photoList.size(); i++) {
+                                    String fullSizeImageUrl = (String)((LinkedTreeMap)photoList.get
+                                            (i)).get
+                                            ("image_url");
+                                    photoInfoList.get(i).put("full_size_image_url",
+                                            fullSizeImageUrl);
+                                }
+
                             }
                         }
                         return null;
@@ -126,10 +157,13 @@ public class DrawerFragment extends BaseFragment{
                     @Override
                     protected void onPostExecute(Object o) {
                         super.onPostExecute(o);
-                        //Log.i("result",photoInfoList.toString());
-                        addMarkerOnMap();
-                        mAdapter.notifyDataSetChanged();
-
+                        if (imageSize == THUMBNAIL_SIZE) {
+                            mProgressBar.setVisibility(View.GONE);
+                            iButton.setClickable(true);
+                            mActivity.unlockDrawer();
+                            addMarkerOnMap();
+                            mAdapter.notifyDataSetChanged();
+                        }
                     }
                 });
             }

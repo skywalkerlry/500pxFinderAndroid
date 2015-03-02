@@ -51,6 +51,7 @@ public class DrawerAdapter
             imageLoader = RequestManager.getInstance().getImageLoader();
         viewHolder.order.setText(Integer.toString(position+1));
         viewHolder.thumbNail.setImageUrl(photoInfo.get("image_url").toString(),imageLoader);
+        viewHolder.thumbNail.setDefaultImageResId(R.drawable.default_thumbnail);
     }
 
     @Override
