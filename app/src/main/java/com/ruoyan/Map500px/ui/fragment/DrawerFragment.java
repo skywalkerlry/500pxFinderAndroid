@@ -29,6 +29,7 @@ import com.ruoyan.map500px.ui.listener.RecyclerItemClickListener;
 import com.ruoyan.map500px.utils.JsonUtils;
 import com.ruoyan.map500px.utils.TaskUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,12 +52,19 @@ public class DrawerFragment extends BaseFragment{
     public static DrawerFragment newInstance(UserLocation location) {
         DrawerFragment fragment = new DrawerFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(USER_LATITUDE,Double.toString(location.getUserLocation().get
-                ("latitude")));
-        bundle.putString(USER_LONGITUDE,Double.toString(location.getUserLocation().get
-                ("longitude")));
-        bundle.putString(RADIUS,Double.toString(location.getUserLocation().get
-                ("radius")));
+        if (location != null) {
+            bundle.putString(USER_LATITUDE, Double.toString(location.getUserLocation().get
+                    ("latitude")));
+            bundle.putString(USER_LONGITUDE, Double.toString(location.getUserLocation().get
+                    ("longitude")));
+            bundle.putString(RADIUS, Double.toString(location.getUserLocation().get
+                    ("radius")));
+        }
+        else {
+            bundle.putString(USER_LATITUDE, "0");
+            bundle.putString(USER_LONGITUDE, "0");
+            bundle.putString(RADIUS, Double.toString(EQUATOR_LENGTH / 10));
+        }
 
         fragment.setArguments(bundle);
         return fragment;
@@ -82,10 +90,11 @@ public class DrawerFragment extends BaseFragment{
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener
                         .OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        String largeImageUrl = photoInfoList.get(position).get("full_size_image_url").toString();
+                        double imageId = (double)photoInfoList.get(position).get("id");
+                        BigDecimal imageIdDecimal = new BigDecimal(imageId);
                         Intent intent = new Intent(getActivity(), ImageViewActivity.class);
-                        intent.putExtra(ImageViewActivity.IMAGE_URL, largeImageUrl);
-//                        intent.putExtra(ImageViewActivity.IMAGE_ORDER, position);
+                        intent.putExtra(ImageViewActivity.IMAGE_ID, imageIdDecimal.toString());
+
                         startActivity(intent);
                     }
                 })
@@ -105,7 +114,7 @@ public class DrawerFragment extends BaseFragment{
     }
 
     private void requestImageInfo(int imageSize) {
-        String requestImg = Api500px.HOST + Api500px.SORT_RATING + "&geo=" +
+        String requestImg = Api500px.HOST_SEARCH + Api500px.SORT_RATING + "&geo=" +
                 userLatitude + "%2C" + userLongitude
                 + "%2C" + Double.toString(searchRadius) + "mi" + "&image_size=" + Integer.toString
                 (imageSize) +
@@ -127,43 +136,30 @@ public class DrawerFragment extends BaseFragment{
                     @Override
                     protected Object doInBackground(Object... inputs) {
                         List<Object> photoList = parseJsonToPhotoList(response);
-                        if (imageSize == THUMBNAIL_SIZE) {
-                            photoInfoList.clear();
-                            if (photoList != null) {
-                                for (int i = 0; i < photoList.size(); i++) {
-                                    Map<String, Object> params = getMappedParams(photoList, i);
-                                    if (params != null) {
-                                        photoInfoList.add(params);
-                                    }
+                        photoInfoList.clear();
+                        if (photoList != null) {
+                            for (int i = 0; i < photoList.size(); i++) {
+                                Map<String, Object> params = getMappedParams(photoList, i);
+                                if (params != null) {
+                                    photoInfoList.add(params);
                                 }
-                                requestImageInfo(FULL_IMAGE_SIZE);
                             }
                         }
-                        else if (imageSize == FULL_IMAGE_SIZE) {
-                            if (photoList != null) {
-                                for (int i = 0; i < photoList.size(); i++) {
-                                    String fullSizeImageUrl = (String)((LinkedTreeMap)photoList.get
-                                            (i)).get
-                                            ("image_url");
-                                    photoInfoList.get(i).put("full_size_image_url",
-                                            fullSizeImageUrl);
-                                }
 
-                            }
-                        }
                         return null;
                     }
 
                     @Override
                     protected void onPostExecute(Object o) {
                         super.onPostExecute(o);
-                        if (imageSize == THUMBNAIL_SIZE) {
-                            mProgressBar.setVisibility(View.GONE);
-                            iButton.setClickable(true);
-                            mActivity.unlockDrawer();
-                            addMarkerOnMap();
-                            mAdapter.notifyDataSetChanged();
-                        }
+                        mProgressBar.setVisibility(View.GONE);
+                        iButton.setClickable(true);
+                        mActivity.unlockDrawer();
+                        mActivity.getActionBar().setDisplayHomeAsUpEnabled(true);
+                        mActivity.getActionBar().setHomeButtonEnabled(true);
+                        addMarkerOnMap();
+                        mAdapter.notifyDataSetChanged();
+
                     }
                 });
             }
@@ -202,10 +198,12 @@ public class DrawerFragment extends BaseFragment{
         Map<String,Object> paramMap = new HashMap<String,Object>();
         if (((LinkedTreeMap)list.get(i)).get("latitude")==null)
             return null;
+        double id = (double)((LinkedTreeMap)list.get(i)).get("id");
         double latitude = (double)((LinkedTreeMap)list.get(i)).get("latitude");
         double longitude = (double)((LinkedTreeMap)list.get(i)).get("longitude");
         String imageUrl = (String)((LinkedTreeMap)list.get(i)).get("image_url");
 
+        paramMap.put("id", id);
         paramMap.put("latitude",latitude);
         paramMap.put("longitude", longitude);
         paramMap.put("image_url", imageUrl);

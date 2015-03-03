@@ -26,7 +26,7 @@ public class BaseFragment extends Fragment implements OnMapReadyCallback {
     public static final int THUMBNAIL_SIZE = 3;
     public static final int FULL_IMAGE_SIZE = 4;
     public static final float INITIAL_DISPLAY_RANGE = 12;
-    private static final double EQUATOR_LENGTH = 40075004;
+    public static final double EQUATOR_LENGTH = 40075004;
     private static final double MILE_TO_METER = 1609.344;
 
     public static GoogleMap map = null;

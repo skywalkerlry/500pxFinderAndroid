@@ -51,7 +51,6 @@ public class BaseActivity extends FragmentActivity implements GoogleApiClient
         super.onCreate(savedInstanceState);
         initActionBar();
         buildGoogleApiClient();
-        initImageLoader(getApplicationContext());
     }
 
     private void initActionBar() {

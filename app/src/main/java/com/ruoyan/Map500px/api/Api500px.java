@@ -4,7 +4,8 @@ package com.ruoyan.map500px.api;
  * Created by ruoyan on 2/16/15.
  */
 public class Api500px {
-    public static final String HOST = "https://api.500px.com/v1/photos/search?";
+    public static final String HOST_SEARCH = "https://api.500px.com/v1/photos/search?";
+    public static final String HOST_BASIC = "https://api.500px.com/v1/photos/";
     public static final String SORT_RATING = "sort=rating";
     public static final String SORT_HIGHEST_RATING = "sort=highest_rating";
 

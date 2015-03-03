@@ -34,10 +34,17 @@ public class MyMapFragment extends BaseFragment implements View.OnClickListener{
     public static MyMapFragment newInstance(UserLocation location) {
         MyMapFragment fragment = new MyMapFragment();
         Bundle bundle = new Bundle();
-        bundle.putDouble(USER_LATITUDE, location.getUserLocation().get("latitude"));
-        bundle.putDouble(USER_LONGITUDE, location.getUserLocation().get
-                ("longitude"));
-        bundle.putDouble(RADIUS, location.getUserLocation().get("radius"));
+        if (location != null) {
+            bundle.putDouble(USER_LATITUDE, location.getUserLocation().get("latitude"));
+            bundle.putDouble(USER_LONGITUDE, location.getUserLocation().get
+                    ("longitude"));
+            bundle.putDouble(RADIUS, location.getUserLocation().get("radius"));
+        }
+        else {
+            bundle.putDouble(USER_LATITUDE, 0);
+            bundle.putDouble(USER_LONGITUDE, 0);
+            bundle.putDouble(RADIUS, 0);
+        }
 
         fragment.setArguments(bundle);
         return fragment;
@@ -109,6 +116,8 @@ public class MyMapFragment extends BaseFragment implements View.OnClickListener{
         map.clear();
         iButton.setClickable(false);
         mainActivity.lockDrawer();
+        mainActivity.getActionBar().setDisplayHomeAsUpEnabled(false);
+        mainActivity.getActionBar().setHomeButtonEnabled(false);
         if (!mProgressBar.isShown())
             mProgressBar.setVisibility(View.VISIBLE);
         double currentLatitude = map.getCameraPosition().target.latitude;

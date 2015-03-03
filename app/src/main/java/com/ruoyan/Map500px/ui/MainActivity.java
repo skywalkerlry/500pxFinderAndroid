@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.ruoyan.map500px.R;
@@ -43,6 +44,15 @@ public class MainActivity extends BaseActivity{
         lockDrawer();
         setTitle("Swipe");
         firstStart = true;
+        initImageLoader(getApplicationContext());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     protected void replaceFragment(int viewId, android.support.v4.app.Fragment fragment) {
