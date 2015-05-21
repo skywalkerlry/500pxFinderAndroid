@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,6 +16,8 @@ import com.jpardogo.android.googleprogressbar.library.FoldingCirclesDrawable;
 import com.ruoyan.map500px.R;
 import com.ruoyan.map500px.bean.UserLocation;
 import com.ruoyan.map500px.ui.MainActivity;
+
+import at.markushi.ui.CircleButton;
 
 /**
  * Created by ruoyan on 2/18/15.
@@ -60,10 +61,13 @@ public class MyMapFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mainActivity = (MainActivity)getActivity();
-        contentView = inflater.inflate(R.layout.fragment_map,container,false);
+        contentView = inflater.inflate(R.layout.fragment_map_below_lollipop, container, false);
+
         parseArgument();
 
-        iButton = (ImageButton)contentView.findViewById(R.id.refresh_button);
+        iButton = (CircleButton)contentView.findViewById(R.id.refresh_button);
+
+//        iButton = (ImageButton)contentView.findViewById(R.id.refresh_button);
         iButton.setOnClickListener(this);
         iButton.setClickable(false);
         mProgressBar = (ProgressBar)contentView.findViewById(R.id.google_progress);
@@ -120,12 +124,11 @@ public class MyMapFragment extends BaseFragment implements View.OnClickListener{
         mainActivity.getActionBar().setHomeButtonEnabled(false);
         if (!mProgressBar.isShown())
             mProgressBar.setVisibility(View.VISIBLE);
-        double currentLatitude = map.getCameraPosition().target.latitude;
-        double currentLongitude = map.getCameraPosition().target.longitude;
-        double currentZoom = map.getCameraPosition().zoom;
+
+        refreshCamera();
         UserLocation userLocation = new UserLocation(currentLatitude,
                 currentLongitude,zoomToRadius(currentLatitude,currentZoom));
-        mainActivity.initDrawer(userLocation);
+        mainActivity.initDrawer(userLocation,true,false);
     }
 
 }

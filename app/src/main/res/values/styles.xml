@@ -1,17 +1,13 @@
 <resources>
 
-    <!-- Application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <!--<style name="AppTheme" parent="android:Theme.Material">-->
-
-        <!--<item name="android:windowBackground">@drawable/main_bg</item>-->
+    <style name="AppTheme" parent="android:Theme.Holo.Light">
         <item name="android:colorBackground">@color/black</item>
         <item name="android:actionBarStyle">@style/ActionbarStyle</item>
         <item name="android:actionOverflowButtonStyle">@style/ActionbarOverFlowStyle</item>
     </style>
 
     <style name="ActionbarStyle" parent="android:Widget.Holo.ActionBar">
-        <item name="android:background">@color/main_bg</item>
+        <item name="android:background">@color/white</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_back_holo_light</item>
         <item name="android:titleTextStyle">@style/ActionbarTitleTextStyle</item>
     </style>
@@ -21,7 +17,7 @@
     </style>
 
     <style name="ActionbarOverFlowStyle" parent="@android:style/Widget.Holo.ActionButton.Overflow">
-        <item name="android:src">@drawable/ic_action_overflow</item>
+        <item name="android:src">@drawable/ic_action_communication_call_made</item>
     </style>
 
     <style name="TranslucentTheme" parent="@style/AppTheme">

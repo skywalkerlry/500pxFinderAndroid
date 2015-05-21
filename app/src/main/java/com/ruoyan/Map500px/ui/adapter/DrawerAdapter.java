@@ -12,23 +12,22 @@ import com.ruoyan.map500px.R;
 import com.ruoyan.map500px.data.RequestManager;
 
 import java.util.List;
-import java.util.Map;
 
 public class DrawerAdapter
         extends RecyclerView.Adapter
         <DrawerAdapter.ListItemViewHolder> {
 
-    private List<Map<String,Object>> photoInfoList;
+    private List<String> thumbnailUrlList;
     ImageLoader imageLoader = RequestManager.getInstance().getImageLoader();
 
 
-    public DrawerAdapter(List<Map<String,Object>> photoInfoList) {
+    public DrawerAdapter(List<String> thumbnailUrlList) {
 
-        this.photoInfoList = photoInfoList;
+        this.thumbnailUrlList = thumbnailUrlList;
     }
 
-    public Map<String,Object> getItem(int position) {
-        return photoInfoList.get(position);
+    public String getItem(int position) {
+        return thumbnailUrlList.get(position);
     }
 
     @Override
@@ -46,17 +45,17 @@ public class DrawerAdapter
 
     @Override
     public void onBindViewHolder(ListItemViewHolder viewHolder, int position) {
-        Map<String,Object> photoInfo = photoInfoList.get(position);
+        String thumbnailUrl = thumbnailUrlList.get(position);
         if (imageLoader == null)
             imageLoader = RequestManager.getInstance().getImageLoader();
         viewHolder.order.setText(Integer.toString(position+1));
-        viewHolder.thumbNail.setImageUrl(photoInfo.get("image_url").toString(),imageLoader);
+        viewHolder.thumbNail.setImageUrl(thumbnailUrl,imageLoader);
         viewHolder.thumbNail.setDefaultImageResId(R.drawable.default_thumbnail);
     }
 
     @Override
     public int getItemCount() {
-        return photoInfoList.size();
+        return thumbnailUrlList.size();
     }
 
     public final static class ListItemViewHolder extends RecyclerView.ViewHolder {

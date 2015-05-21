@@ -55,7 +55,7 @@ public class BaseActivity extends FragmentActivity implements GoogleApiClient
 
     private void initActionBar() {
         actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
@@ -89,8 +89,10 @@ public class BaseActivity extends FragmentActivity implements GoogleApiClient
                 onBackPressed();
                 return true;
             case R.id.action_settings:
-     //           startActivity(new Intent(this, PreferenceActivity.class));
+                startActivity(new Intent(this, PreferenceActivity.class));
                 return true;
+            case R.id.about:
+                startActivity(new Intent(this, AboutActivity.class));
             default:
                 return super.onOptionsItemSelected(item);
         }

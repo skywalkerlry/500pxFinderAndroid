@@ -24,7 +24,7 @@
         android:layout_alignRight="@+id/thumb_nail"
         android:layout_alignBottom="@+id/thumb_nail"
         android:gravity="bottom|right"
-        android:textSize="20sp"
+        android:textSize="45px"
         android:textColor="@color/white"
         android:paddingRight="2dp"
         android:textStyle="normal" />

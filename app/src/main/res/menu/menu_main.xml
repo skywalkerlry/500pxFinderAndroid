@@ -2,8 +2,15 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".MainActivity">
+    <item android:id="@+id/favorite_mode"
+          android:title="My favorites"
+          app:showAsAction="never"/>
     <item android:id="@+id/action_settings"
           android:title="@string/action_settings"
-          android:orderInCategory="100"
+          android:icon="@drawable/ic_action_action_extension"
+          app:showAsAction="never"/>
+    <item android:id="@+id/about"
+          android:title="@string/about"
+          android:icon="@drawable/ic_action_social_people_outline"
           app:showAsAction="never"/>
 </menu>

@@ -1,37 +1,18 @@
 <resources>
 
-    <!-- Application theme. -->
-    <!--<style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">-->
-        <style name="AppTheme" parent="android:Theme.Material.Light">
-
-        <!--<item name="android:windowBackground">@drawable/main_bg</item>-->
-        <item name="android:colorBackground">@color/white</item>
-        <item name="android:actionBarStyle">@style/ActionbarStyle</item>
-        <!--<item name="android:colorPrimary">@color/indigo</item>-->
+    <style name="AppTheme" parent="android:Theme.Material.Light">
+        <item name="android:colorPrimary">@color/white</item>
         <item name="android:colorPrimaryDark">@color/light_blue</item>
         <item name="android:actionOverflowButtonStyle">@style/ActionbarOverFlowStyle</item>
     </style>
 
-    <style name="ActionbarStyle" parent="android:Widget.Holo.ActionBar">
-        <!--<item name="android:background">@color/indigo</item>-->
-        <!--<item name="android:homeAsUpIndicator">@drawable/ic_back_holo_light</item>-->
-        <item name="android:titleTextStyle">@style/ActionbarTitleTextStyle</item>
+    <style name="ActionbarOverFlowStyle"
+           parent="@android:style/Widget.Material.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_communication_call_made</item>
     </style>
-    
+
     <style name="WihteText" parent="android:style/TextAppearance" >
         <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="ActionbarTitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/indigo</item>
-    </style>
-
-    <style name="ActionbarOverFlowStyle" parent="@android:style/Widget.Holo.ActionButton.Overflow">
-        <item name="android:src">@drawable/ic_action_overflow</item>
-    </style>
-
-    <style name="TranslucentTheme" parent="@style/AppTheme">
-        <item name="android:windowIsTranslucent">true</item>
     </style>
 
 </resources>

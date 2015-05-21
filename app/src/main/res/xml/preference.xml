@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Acknowledgements">
+        <Preference android:title="500px"
+            android:summary="The premier photography community"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="About">
+        <Preference
+            android:title="Developer"
+            android:summary="Ruoyan Liu, New York University\nYawei Chen, Villanova University">
+        </Preference>
+
+        <Preference android:title="My 500px">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://500px.com/Rocky_Liu" />
+        </Preference>
+
+        <Preference android:title="Contact us"
+            android:summary="ruoyanliu2013@gmail.com\nchinachirs@gmail.com">
+        </Preference>
+
+        <Preference android:key="@string/pref_key_version" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

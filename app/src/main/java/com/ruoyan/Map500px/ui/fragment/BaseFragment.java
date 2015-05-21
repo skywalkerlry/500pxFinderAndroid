@@ -7,11 +7,12 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+
+import at.markushi.ui.CircleButton;
 
 
 /**
@@ -21,19 +22,30 @@ public class BaseFragment extends Fragment implements OnMapReadyCallback {
 
     public static final String USER_LATITUDE = "latitude";
     public static final String USER_LONGITUDE = "longitude";
+    public static final String EXPLORE_MODE = "mode";
+    public static final String FROM_MENU = "from_menu";
     public static final String RADIUS = "radius";
     public static final double INIT_SEARCH_RADIUS = 3.5;
     public static final int THUMBNAIL_SIZE = 3;
-    public static final int FULL_IMAGE_SIZE = 4;
+    public static final int REQUEST_TIMEOUT = 10000;
     public static final float INITIAL_DISPLAY_RANGE = 12;
     public static final double EQUATOR_LENGTH = 40075004;
     private static final double MILE_TO_METER = 1609.344;
+    public static final double KILOMETER_TO_LATITUDE_DEGREE = 111.3;
 
     public static GoogleMap map = null;
     public static int screenWidth;
+    public static int screenHeight;
 
     public static ProgressBar mProgressBar;
-    public static ImageButton iButton;
+//    public static ImageButton iButton;
+    public static CircleButton iButton;
+
+    public static double currentLatitude;
+    public static double currentLongitude;
+    public static double currentZoom;
+
+    public static boolean isExplore;
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -67,10 +79,21 @@ public class BaseFragment extends Fragment implements OnMapReadyCallback {
         return radius;
     }
 
+    public double distanceToLongitudeOffset(double distance, double latitude) {
+        return 360*distance*1000*1.5/(EQUATOR_LENGTH*Math.cos(Math.PI*latitude/180.0));
+    }
+
     private void getScreenWidth() {
         WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         screenWidth = display.getWidth();
+        screenHeight = display.getHeight();
+    }
+
+    public void refreshCamera() {
+        currentLatitude = map.getCameraPosition().target.latitude;
+        currentLongitude = map.getCameraPosition().target.longitude;
+        currentZoom = map.getCameraPosition().zoom;
     }
 
 }

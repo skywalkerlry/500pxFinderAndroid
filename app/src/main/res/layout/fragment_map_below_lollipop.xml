@@ -1,8 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".MainActivity" >
 
     <FrameLayout
         android:id="@+id/map"
@@ -10,19 +11,18 @@
         android:layout_height="wrap_content">
     </FrameLayout>
 
-    <ImageButton
+    <at.markushi.ui.CircleButton
         android:id="@+id/refresh_button"
+        android:layout_width="64dip"
+        android:layout_height="64dip"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_width="@dimen/fab_size"
-        android:layout_height="@dimen/fab_size"
         android:layout_gravity="bottom|right"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="60dp"
-        android:background="@drawable/ripple"
-        android:stateListAnimator="@anim/anim"
         android:src="@drawable/ic_action_maps_place"
-        android:elevation="1dp" />
+        app:cb_color="@color/pink"
+        app:cb_pressedRingWidth="8dip" />
 
     <ProgressBar
         android:id="@+id/google_progress"
