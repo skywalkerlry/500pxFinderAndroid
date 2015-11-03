@@ -136,8 +136,7 @@
         android:text="OK"
         android:textSize="20dp"
         android:id="@+id/bootstrap_button"
-        bootstrap:bb_icon_right="fa-android"
-        bootstrap:bb_type="success"
+        bootstrap:bootstrapBrand="success"
         android:layout_gravity="center"/>
 
 </LinearLayout>
